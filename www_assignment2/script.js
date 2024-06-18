@@ -6,6 +6,27 @@ const restartButton = document.getElementById('restartButton');
 const playerOne = document.getElementById('player1');
 const playerTwo = document.getElementById('player2');
 
+// Add this to your existing script.js
+
+const rulesButton = document.getElementById('rulesButton');
+const modal = document.getElementById('rulesModal');
+const span = document.getElementsByClassName('close')[0];
+
+rulesButton.onclick = function() {
+    modal.style.display = 'block';
+}
+
+span.onclick = function() {
+    modal.style.display = 'none';
+}
+
+window.onclick = function(event) {
+    if (event.target == modal) {
+        modal.style.display = 'none';
+    }
+}
+
+
 function decidePlayers() {
     let currentPlayer2 = Math.random() < 0.5 ? 'X' : 'O';
 

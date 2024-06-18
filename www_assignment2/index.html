@@ -6,14 +6,11 @@
     <title>Tic Tac Toe</title>
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Schoolbell&display=swap" rel="stylesheet">
-
 </head>
 <body>
-
-    <div class="container1">
+<div class="container1">
     <h1>Tic Tac Toe</h1>
     <div class="container">
-
         <div class="player-info">
             <div id="player1">Player 1: X</div>
             <div id="player2">Player 2: O</div>
@@ -29,18 +26,29 @@
             <div class="cell" data-cell><span class="mark"></span></div>
             <div class="cell" data-cell><span class="mark"></span></div>
         </div>
-
         <div class="player-info">
             <div id="player1Wins" class="tally">Player 1 Wins: 0</div>
             <div id="player2Wins" class="tally">Player 2 Wins: 0</div>
         </div>
     </div>
     <h2 id="statusMessage"></h2>
-        <button id="restartButton">Restart Game</button>
+    <button id="restartButton">Restart Game</button>
+    <button id="rulesButton">Game Rules</button>
+</div>
+<div id="confettiContainer"></div>
+
+<!-- Modal Structure -->
+<div id="rulesModal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2>Game Rules</h2>
+        <p>1. The game is played on a grid that's 3 squares by 3 squares.</p>
+        <p>2. Player 1 is X, Player 2 is O. Players take turns putting their marks in empty squares.</p>
+        <p>3. The first player to get 3 of their marks in a row (up, down, across, or diagonally) is the winner.</p>
+        <p>4. When all 9 squares are full, the game is over. If no player has 3 marks in a row, the game ends in a draw.</p>
     </div>
-    <div id="confettiContainer"></div>
+</div>
 
-
-    <script src="script.js"></script>
+<script src="script.js"></script>
 </body>
 </html>
