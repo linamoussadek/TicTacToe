@@ -1,4 +1,3 @@
-// script.js
 const board = document.getElementById('board');
 const cells = document.querySelectorAll('[data-cell]');
 const statusMessage = document.getElementById('statusMessage');
@@ -7,21 +6,20 @@ const restartButton = document.getElementById('restartButton');
 const playerOne = document.getElementById('player1');
 const playerTwo = document.getElementById('player2');
 
-function decidePlayers(){
+function decidePlayers() {
+    let currentPlayer2 = Math.random() < 0.5 ? 'X' : 'O';
 
-let currentPlayer2 = Math.random() < 0.5 ? 'X' : 'O'; // Randomly choose 'X' or 'O'
-
-// Display the current player
-if (currentPlayer2 === 'X') {
-    playerOne.textContent = 'Player 1 (X)';
-    playerTwo.textContent = 'Player 2 (O)';
-} else {
-    playerOne.textContent = 'Player 1 (O)';
-    playerTwo.textContent = 'Player 2 (X)';
-}
+    if (currentPlayer2 === 'X') {
+        playerOne.textContent = 'Player 1 (X)';
+        playerTwo.textContent = 'Player 2 (O)';
+    } else {
+        playerOne.textContent = 'Player 1 (O)';
+        playerTwo.textContent = 'Player 2 (X)';
+    }
 }
 
 decidePlayers();
+
 const eraser = document.createElement('img');
 eraser.src = 'Angelo-Gemmi-eraser.svg';
 eraser.classList.add('eraser');
@@ -48,14 +46,13 @@ function triggerConfetti() {
         const confetti = document.createElement('div');
         confetti.classList.add('confetti');
         confetti.style.left = `${Math.random() * 100}%`;
-        confetti.style.animationDelay = `${Math.random() * 10}s`; // Random delay for staggered effect
+        confetti.style.animationDelay = `${Math.random() * 10}s`;
         confettiContainer.appendChild(confetti);
     }
 
-    // Clear confetti after animation ends
     setTimeout(() => {
         confettiContainer.innerHTML = '';
-    }, 4000); // Adjust timing to match confetti animation duration
+    }, 4000);
 }
 
 const handleCellClick = (e) => {
@@ -94,15 +91,20 @@ const checkWin = (player) => {
 const restartGame = () => {
     currentPlayer = 'X';
     boardState.fill(null);
-    cells.forEach(cell => cell.textContent = '');
+    cells.forEach(cell => {
+        const markSpan = cell.querySelector('.mark');
+        if (markSpan) {
+            markSpan.textContent = '';
+        }
+        cell.classList.remove('draw-x', 'draw-o');
+    });
     document.body.appendChild(eraser);
     eraser.classList.add('erase-board');
     setTimeout(() => {
         eraser.remove();
-    }, 1500); // Adjust timing to match animation duration
+    }, 1500);
     decidePlayers();
     statusMessage.textContent = `${currentPlayer}'s Turn`;
-
     gameActive = true;
 };
 
