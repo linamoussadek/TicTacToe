@@ -6,7 +6,11 @@ const restartButton = document.getElementById('restartButton');
 const playerOne = document.getElementById('player1');
 const playerTwo = document.getElementById('player2');
 
-// Add this to your existing script.js
+const playerOneWins = document.getElementById('player1Wins');
+const playerTwoWins = document.getElementById('player2Wins');
+
+let playerOneScore = 0;
+let playerTwoScore = 0;
 
 const rulesButton = document.getElementById('rulesButton');
 const modal = document.getElementById('rulesModal');
@@ -25,7 +29,6 @@ window.onclick = function(event) {
         modal.style.display = 'none';
     }
 }
-
 
 function decidePlayers() {
     let currentPlayer2 = Math.random() < 0.5 ? 'X' : 'O';
@@ -93,6 +96,7 @@ const handleCellClick = (e) => {
         triggerConfetti();
         statusMessage.textContent = `${currentPlayer} Wins!`;
         gameActive = false;
+        updateScore(currentPlayer);
         setTimeout(restartGame, 3000);
     } else if (boardState.every(cell => cell !== null)) {
         statusMessage.textContent = 'Draw!';
@@ -107,6 +111,22 @@ const checkWin = (player) => {
     return winningCombinations.some(combination => {
         return combination.every(index => boardState[index] === player);
     });
+};
+
+const updateScore = (player) => {
+    if (player === 'X' && playerOne.textContent.includes('X')) {
+        playerOneScore++;
+        playerOneWins.textContent = `Player 1 Wins: ${playerOneScore}`;
+    } else if (player === 'O' && playerOne.textContent.includes('O')) {
+        playerOneScore++;
+        playerOneWins.textContent = `Player 1 Wins: ${playerOneScore}`;
+    } else if (player === 'X' && playerTwo.textContent.includes('X')) {
+        playerTwoScore++;
+        playerTwoWins.textContent = `Player 2 Wins: ${playerTwoScore}`;
+    } else if (player === 'O' && playerTwo.textContent.includes('O')) {
+        playerTwoScore++;
+        playerTwoWins.textContent = `Player 2 Wins: ${playerTwoScore}`;
+    }
 };
 
 const restartGame = () => {
