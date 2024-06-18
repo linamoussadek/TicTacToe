@@ -30,13 +30,18 @@ window.onclick = function(event) {
     }
 }
 
-function decidePlayers() {
-    let currentPlayer2 = Math.random() < 0.5 ? 'X' : 'O';
+let currentPlayer = 'X';
+let player1Symbol, player2Symbol;
 
-    if (currentPlayer2 === 'X') {
+function decidePlayers() {
+    if (Math.random() < 0.5) {
+        player1Symbol = 'X';
+        player2Symbol = 'O';
         playerOne.textContent = 'Player 1 (X)';
         playerTwo.textContent = 'Player 2 (O)';
     } else {
+        player1Symbol = 'O';
+        player2Symbol = 'X';
         playerOne.textContent = 'Player 1 (O)';
         playerTwo.textContent = 'Player 2 (X)';
     }
@@ -48,7 +53,6 @@ const eraser = document.createElement('img');
 eraser.src = 'Angelo-Gemmi-eraser.svg';
 eraser.classList.add('eraser');
 
-let currentPlayer = 'X';
 let boardState = Array(9).fill(null);
 let gameActive = true;
 
@@ -114,16 +118,10 @@ const checkWin = (player) => {
 };
 
 const updateScore = (player) => {
-    if (player === 'X' && playerOne.textContent.includes('X')) {
+    if (player === player1Symbol) {
         playerOneScore++;
         playerOneWins.textContent = `Player 1 Wins: ${playerOneScore}`;
-    } else if (player === 'O' && playerOne.textContent.includes('O')) {
-        playerOneScore++;
-        playerOneWins.textContent = `Player 1 Wins: ${playerOneScore}`;
-    } else if (player === 'X' && playerTwo.textContent.includes('X')) {
-        playerTwoScore++;
-        playerTwoWins.textContent = `Player 2 Wins: ${playerTwoScore}`;
-    } else if (player === 'O' && playerTwo.textContent.includes('O')) {
+    } else if (player === player2Symbol) {
         playerTwoScore++;
         playerTwoWins.textContent = `Player 2 Wins: ${playerTwoScore}`;
     }
