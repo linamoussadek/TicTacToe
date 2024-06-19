@@ -2,6 +2,9 @@ const board = document.getElementById('board');
 const cells = document.querySelectorAll('[data-cell]');
 const statusMessage = document.getElementById('statusMessage');
 const restartButton = document.getElementById('restartButton');
+const playButton = document.getElementById('playButton');
+const introScreen = document.getElementById('introScreen');
+const gameScreen = document.getElementById('gameScreen');
 
 const playerOne = document.getElementById('player1');
 const playerTwo = document.getElementById('player2');
@@ -28,6 +31,11 @@ window.onclick = function(event) {
     if (event.target == modal) {
         modal.style.display = 'none';
     }
+}
+
+playButton.onclick = function() {
+    introScreen.style.display = 'none';
+    gameScreen.style.display = 'flex';
 }
 
 let currentPlayer = 'X';
