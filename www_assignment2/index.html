@@ -6,11 +6,18 @@
     <title>Tic Tac Toe</title>
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Orbitron&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 </head>
 <body>
 <div id="introScreen" class="intro-screen">
     <h1>Tic Tac Toe</h1>
-    <button id="playButton">Play</button>
+    <p>This is a Tic Tac Toe game created as an assignment project. The game was developed by Lina and Owen. Enjoy playing!</p>
+    <button id="playButton">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="80" height="80">
+            <circle cx="32" cy="32" r="32" fill="#4CAF50"/>
+            <polygon points="26,20 46,32 26,44" fill="#fff"/>
+        </svg>
+    </button>
 </div>
 <header>
     <h1>Tic Tac Toe</h1>
@@ -38,12 +45,13 @@
         </div>
     </div>
     <h2 id="statusMessage"></h2>
-    <button id="restartButton">Restart Game</button>
+    <button id="restartButton">
+        <i class="fas fa-redo"></i> Restart Game
+    </button>
     <button id="rulesButton">Game Rules</button>
 </div>
 <div id="confettiContainer"></div>
 
-<!-- Modal Structure -->
 <div id="rulesModal" class="modal">
     <div class="modal-content">
         <span class="close">&times;</span>
@@ -54,10 +62,6 @@
         <p>4. When all 9 squares are full, the game is over. If no player has 3 marks in a row, the game ends in a draw.</p>
     </div>
 </div>
-
-<footer>
-    <p>This game was created by Owen and Lina</p>
-</footer>
 
 <script src="script.js"></script>
 </body>

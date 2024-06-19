@@ -4,10 +4,10 @@ body {
     justify-content: center;
     align-items: center;
     height: 100vh;
-    background-color: #000033; /* Dark blue background */
-    font-family: 'Orbitron', Arial, sans-serif; /* Futuristic font */
+    background-color: #000033;
+    font-family: 'Orbitron', Arial, sans-serif;
     margin: 0;
-    color: #FFFFFF; /* White for text */
+    color: #FFFFFF;
 }
 
 .intro-screen {
@@ -20,26 +20,32 @@ body {
 }
 
 .intro-screen h1 {
-    font-size: 4em;
-    color: #00FFFF; /* Cyan color for title */
-    text-shadow: 0 0 10px #00FFFF, 0 0 20px #00FFFF, 0 0 30px #00FFFF; /* Neon glow effect */
+    font-size: 5em;
+    color: #00FFFF;
+    text-shadow: 0 0 5px #00FFFF;
 }
 
-.intro-screen button {
-    padding: 20px 40px;
-    font-size: 1.5em;
-    cursor: pointer;
-    background-color: #000;
-    color: #00FFFF;
-    border: 2px solid #00FFFF;
-    border-radius: 10px;
-    transition: background-color 0.2s, transform 0.2s;
+.intro-screen p {
+    font-size: 1.2em;
+    color: #FFFFFF;
     margin-top: 20px;
 }
 
-.intro-screen button:hover {
-    background-color: #00FFFF;
-    color: #000;
+.intro-screen button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 20px;
+    margin-top: 30px;
+}
+
+.intro-screen button svg {
+    width: 80px;
+    height: 80px;
+    transition: transform 0.2s;
+}
+
+.intro-screen button:hover svg {
     transform: translateY(-2px);
 }
 
@@ -51,7 +57,7 @@ header {
 footer {
     text-align: center;
     margin-top: 20px;
-    color: #00FFFF; /* Cyan color for footer text */
+    color: #00FFFF;
 }
 
 h1, h2, h3, p, span {
@@ -60,7 +66,7 @@ h1, h2, h3, p, span {
 }
 
 .container1 {
-    display: none; /* Hide game container by default */
+    display: none;
     flex-direction: column;
     align-items: center;
     max-width: 1000px;
@@ -78,36 +84,37 @@ h1, h2, h3, p, span {
 
 .board {
     display: grid;
-    grid-template-columns: repeat(3, 100px); /* Adjusted cell size */
-    grid-template-rows: repeat(3, 100px); /* Adjusted cell size */
+    grid-template-columns: repeat(3, 100px);
+    grid-template-rows: repeat(3, 100px);
     gap: 5px;
     margin: 20px auto;
     padding: 10px;
     background: transparent;
     border-radius: 10px;
-    box-shadow: 0 0 20px #800080; /* Purple shadow for the board */
+    box-shadow: 0 0 20px #800080;
     transform: translateY(-10px);
     transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+    position: relative;
 }
 
 .cell {
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 100px; /* Adjusted cell size */
-    height: 100px; /* Adjusted cell size */
+    width: 100px;
+    height: 100px;
     background: transparent;
-    border: 2px solid #800080; /* Purple border for cells */
-    font-size: 2.5em; /* Adjusted font size */
+    border: 2px solid #800080;
+    font-size: 2.5em;
     cursor: pointer;
     transition: background-color 0.2s, transform 0.2s, box-shadow 0.2s;
-    box-shadow: 0 0 10px #800080; /* Purple glow for cells */
+    box-shadow: 0 0 10px #800080;
 }
 
 .cell .mark {
     display: block;
-    font-size: 2.5em; /* Adjusted font size */
-    color: #00FFFF; /* Cyan color for marks */
+    font-size: 2.5em;
+    color: #00FFFF;
 }
 
 .cell.draw-x .mark {
@@ -137,33 +144,43 @@ h1, h2, h3, p, span {
 }
 
 .cell:hover {
-    background-color: rgba(128, 0, 128, 0.2); /* Light purple hover effect */
+    background-color: rgba(128, 0, 128, 0.2);
     transform: translateY(-2px);
     box-shadow: 0 0 15px #800080;
 }
 
 #statusMessage {
     margin-top: 20px;
-    font-size: 1.5em; /* Increased font size */
-    color: #00FFFF; /* Cyan color for status message */
+    font-size: 1.5em;
+    color: #00FFFF;
 }
 
 #restartButton, #rulesButton {
-    padding: 10px 20px;
-    font-size: 1em;
+    padding: 15px 30px;
+    font-size: 1.2em;
     cursor: pointer;
     background-color: #000;
     color: #00FFFF;
     border: 2px solid #00FFFF;
-    border-radius: 5px;
-    transition: background-color 0.2s, transform 0.2s;
+    border-radius: 10px;
+    transition: background-color 0.2s, transform 0.2s, box-shadow 0.2s;
     margin: 10px;
+    text-transform: uppercase;
+    box-shadow: 0 0 10px #00FFFF, 0 0 20px #00FFFF;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+#restartButton i {
+    color: currentColor;
 }
 
 #restartButton:hover, #rulesButton:hover {
     background-color: #00FFFF;
     color: #000;
-    transform: translateY(-2px);
+    transform: translateY(-5px);
+    box-shadow: 0 0 15px #00FFFF, 0 0 30px #00FFFF;
 }
 
 .player-info {
@@ -202,7 +219,7 @@ h1, h2, h3, p, span {
     position: absolute;
     width: 100%;
     height: 50%;
-    background-color: #00FFFF; /* Cyan color for confetti */
+    background-color: #00FFFF;
 }
 
 .modal {
@@ -239,20 +256,4 @@ h1, h2, h3, p, span {
     color: #fff;
     text-decoration: none;
     cursor: pointer;
-}
-
-.eraser {
-    position: absolute;
-    top: 10%;
-    left: 50%;
-    transform: translate(-50%, -50%) scale(1);
-    opacity: 0;
-    pointer-events: none;
-    z-index: 1000;
-    width: 512px;
-    height: auto;
-    transition: opacity 0.3s ease-in-out;
-}
-.erase-board {
-    animation: erase-board 1s forwards;
 }
