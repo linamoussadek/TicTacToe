@@ -1,3 +1,5 @@
+
+/*Base and body of application*/
 body {
     display: flex;
     flex-direction: column;
@@ -10,6 +12,8 @@ body {
     color: #FFFFFF;
     cursor: url('../docs/design_system/obi-wans-lightsaber_87091.ico')0 0 , auto;
 }
+
+/*Styling for initial screen before you click play */
 
 .intro-screen {
     display: flex;
@@ -53,6 +57,8 @@ body {
     cursor: url('../docs/design_system/obi-wans-lightsaber_87091.ico')0 0 , auto;
 }
 
+
+/*Styling for the header which says 'tic-tac-toe'*/
 header {
     text-align: center;
     margin-bottom: 20px;
@@ -65,10 +71,14 @@ footer {
     color: #00FFFF;
 }
 
+/*Styling of different fonts*/
+
 h1, h2, h3, p, span {
     font-family: 'Orbitron', Arial, sans-serif;
     color: #FFFFFF;
 }
+
+/*Styling of the container that contains all the game content including rules and restart button, as well as status text*/
 
 .container1 {
     display: none;
@@ -79,6 +89,8 @@ h1, h2, h3, p, span {
     cursor: url('../docs/design_system/obi-wans-lightsaber_87091.ico')0 0 , auto;
 }
 
+/*Styling of the container that contains the player information and the tic tac toe board*/
+
 .container {
     display: flex;
     flex-direction: column;
@@ -87,6 +99,21 @@ h1, h2, h3, p, span {
     max-width: 500px;
     margin: 20px auto;
 }
+
+/*This is styling for the section that displays who is X and whose is O as well as the score count*/
+
+.player-info {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+.player-info div {
+    text-align: center;
+}
+
+/*This is styling of the tic-tac-toe 3 by 3 board*/
 
 .board {
     display: grid;
@@ -104,6 +131,7 @@ h1, h2, h3, p, span {
     cursor: url('../docs/design_system/obi-wans-lightsaber_87091.ico')0 0 , auto;
 }
 
+/*This is styling for each of the cells in the board*/
 .cell {
     display: flex;
     justify-content: center;
@@ -158,12 +186,16 @@ h1, h2, h3, p, span {
     cursor: url('../docs/design_system/obi-wans-lightsaber_87091.ico')0 0 , auto;
 }
 
+
+/*This is styling for the status message that displays whose turn and if the game won or drawed*/
 #statusMessage {
     margin-top: 20px;
     font-size: 1.5em;
     color: #00FFFF;
 }
 
+
+/*Styling for the restart and rules button*/
 #restartButton, #rulesButton {
     padding: 10px 20px;
     font-size: 1em;
@@ -194,17 +226,10 @@ h1, h2, h3, p, span {
     cursor: url('../docs/design_system/obi-wans-lightsaber_87091.ico')0 0 , auto;
 }
 
-.player-info {
-    display: flex;
-    justify-content: space-between;
-    width: 100%;
-    margin-bottom: 10px;
-}
 
-.player-info div {
-    text-align: center;
-}
 
+
+/*Styling of the confetti animation after a win*/
 @keyframes confetti-fall {
     0% {
         transform: translateY(-200%);
@@ -234,6 +259,8 @@ h1, h2, h3, p, span {
     cursor: url('../docs/design_system/obi-wans-lightsaber_87091.ico')0 0 , auto;
 }
 
+
+/*Styling of the rules popup section*/
 .modal {
     display: none;
     position: fixed;
