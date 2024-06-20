@@ -1,3 +1,4 @@
+//Initializing HTML elements
 const board = document.getElementById('board');
 const cells = document.querySelectorAll('[data-cell]');
 const statusMessage = document.getElementById('statusMessage');
@@ -5,20 +6,48 @@ const restartButton = document.getElementById('restartButton');
 const playButton = document.getElementById('playButton');
 const introScreen = document.getElementById('introScreen');
 const gameScreen = document.getElementById('gameScreen');
-
 const playerOne = document.getElementById('player1');
 const playerTwo = document.getElementById('player2');
 
 const playerOneWins = document.getElementById('player1Wins');
 const playerTwoWins = document.getElementById('player2Wins');
 
-let playerOneScore = 0;
-let playerTwoScore = 0;
+
 
 const rulesButton = document.getElementById('rulesButton');
 const modal = document.getElementById('rulesModal');
 const span = document.getElementsByClassName('close')[0];
 
+
+//Defaulting the player win counts to 0
+
+let playerOneScore = 0;
+let playerTwoScore = 0;
+
+
+//Creating an array of 9 winning combinations
+const winningCombinations = [
+    [0, 1, 2],
+    [3, 4, 5],
+    [6, 7, 8],
+    [0, 3, 6],
+    [1, 4, 7],
+    [2, 5, 8],
+    [0, 4, 8],
+    [2, 4, 6]
+];
+
+let currentPlayer;
+let lastStarter = 'O';
+
+let boardState = Array(9).fill(null);
+let gameActive = true;
+
+
+
+
+
+//Handling certain on Click functionalitys
 rulesButton.onclick = function() {
     modal.style.display = 'block';
 };
@@ -38,29 +67,21 @@ playButton.onclick = function() {
     gameScreen.style.display = 'flex';
 };
 
-let currentPlayer;
-let lastStarter = 'O';
 
+
+// FUNCTIONS
+
+//Helper function for selecting which playe ris X and which is O
 function decidePlayers() {
     currentPlayer = lastStarter = (lastStarter === 'X' ? 'O' : 'X');
     playerOne.textContent = `Player 1 (${currentPlayer})`;
     playerTwo.textContent = `Player 2 (${currentPlayer === 'X' ? 'O' : 'X'})`;
 }
 
-let boardState = Array(9).fill(null);
-let gameActive = true;
 
-const winningCombinations = [
-    [0, 1, 2],
-    [3, 4, 5],
-    [6, 7, 8],
-    [0, 3, 6],
-    [1, 4, 7],
-    [2, 5, 8],
-    [0, 4, 8],
-    [2, 4, 6]
-];
 
+
+//Helper function that triggers confetti upon a win
 function triggerConfetti() {
     const confettiContainer = document.getElementById('confettiContainer');
     for (let i = 0; i < 100; i++) {
@@ -75,6 +96,8 @@ function triggerConfetti() {
     }, 4000);
 }
 
+
+//Event handler that marks the selected cell with the correct x or o and then checks game status
 const handleCellClick = (e) => {
     const cell = e.target;
     const cellIndex = Array.from(cells).indexOf(cell);
@@ -103,12 +126,15 @@ const handleCellClick = (e) => {
     }
 };
 
+//Constant function that checks if a player has won the game
 const checkWin = (player) => {
     return winningCombinations.some(combination => {
         return combination.every(index => boardState[index] === player);
     });
 };
 
+
+//If somebody wins a game add one to their score
 const updateScore = (player) => {
     if (player === currentPlayer) {
         playerOneScore++;
@@ -119,6 +145,8 @@ const updateScore = (player) => {
     }
 };
 
+
+//Function that clears cells and restarts game
 const restartGame = () => {
     boardState.fill(null);
     cells.forEach(cell => {
@@ -131,8 +159,17 @@ const restartGame = () => {
     gameActive = true;
 };
 
+// END OF FUNCTIONS
+
+
+//Add the functionality for listening for cell clicks
 cells.forEach(cell => cell.addEventListener('click', handleCellClick));
+
+//Functionality for listening for a restart
 restartButton.addEventListener('click', restartGame);
 
+//Randomizing intial game players
 decidePlayers();
+
+//Status message shows current players turn
 statusMessage.textContent = `${currentPlayer}'s Turn`;
