@@ -1,4 +1,4 @@
-//Initializing HTML elements
+// Initializing HTML elements
 const board = document.getElementById('board');
 const cells = document.querySelectorAll('[data-cell]');
 const statusMessage = document.getElementById('statusMessage');
@@ -8,24 +8,22 @@ const introScreen = document.getElementById('introScreen');
 const gameScreen = document.getElementById('gameScreen');
 const playerOne = document.getElementById('player1');
 const playerTwo = document.getElementById('player2');
-
 const playerOneWins = document.getElementById('player1Wins');
 const playerTwoWins = document.getElementById('player2Wins');
-
-
 
 const rulesButton = document.getElementById('rulesButton');
 const modal = document.getElementById('rulesModal');
 const span = document.getElementsByClassName('close')[0];
 
+const leaderboardButton = document.getElementById('leaderboardButton');
+const leaderboardModal = document.getElementById('leaderboardModal');
+const leaderboardContent = document.getElementById('leaderboardContent');
 
-//Defaulting the player win counts to 0
-
+// Defaulting the player win counts to 0
 let playerOneScore = 0;
 let playerTwoScore = 0;
 
-
-//Creating an array of 9 winning combinations
+// Creating an array of 9 winning combinations
 const winningCombinations = [
     [0, 1, 2],
     [3, 4, 5],
@@ -39,15 +37,10 @@ const winningCombinations = [
 
 let currentPlayer;
 let lastStarter = 'O';
-
 let boardState = Array(9).fill(null);
 let gameActive = true;
 
-
-
-
-
-//Handling certain on Click functionalitys
+// Handling certain on Click functionalities
 rulesButton.onclick = function() {
     modal.style.display = 'block';
 };
@@ -57,7 +50,7 @@ span.onclick = function() {
 };
 
 window.onclick = function(event) {
-    if (event.target == modal) {
+    if (event.target === modal) {
         modal.style.display = 'none';
     }
 };
@@ -67,21 +60,27 @@ playButton.onclick = function() {
     gameScreen.style.display = 'flex';
 };
 
+leaderboardButton.onclick = function() {
+    leaderboardModal.style.display = 'block';
+    fetchLeaderboard();
+};
 
+window.onclick = function(event) {
+    if (event.target === leaderboardModal) {
+        leaderboardModal.style.display = 'none';
+    }
+};
 
 // FUNCTIONS
 
-//Helper function for selecting which playe ris X and which is O
+// Helper function for selecting which player is X and which is O
 function decidePlayers() {
     currentPlayer = lastStarter = (lastStarter === 'X' ? 'O' : 'X');
     playerOne.textContent = `Player 1 (${currentPlayer})`;
     playerTwo.textContent = `Player 2 (${currentPlayer === 'X' ? 'O' : 'X'})`;
 }
 
-
-
-
-//Helper function that triggers confetti upon a win
+// Helper function that triggers confetti upon a win
 function triggerConfetti() {
     const confettiContainer = document.getElementById('confettiContainer');
     for (let i = 0; i < 100; i++) {
@@ -96,9 +95,8 @@ function triggerConfetti() {
     }, 4000);
 }
 
-
-//Event handler that marks the selected cell with the correct x or o and then checks game status
-const handleCellClick = (e) => {
+// Event handler that marks the selected cell with the correct x or o and then checks game status
+const handleCellClick = async (e) => {
     const cell = e.target;
     const cellIndex = Array.from(cells).indexOf(cell);
 
@@ -106,35 +104,47 @@ const handleCellClick = (e) => {
         return;
     }
 
-    boardState[cellIndex] = currentPlayer;
-    const markSpan = cell.querySelector('.mark');
-    markSpan.textContent = currentPlayer;
-    cell.classList.add(currentPlayer === 'X' ? 'draw-x' : 'draw-o');
+    try {
+        const response = await fetch('index.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ action: 'makeMove', position: cellIndex }),
+        });
 
-    if (checkWin(currentPlayer)) {
-        triggerConfetti();
-        statusMessage.textContent = `${currentPlayer} Wins!`;
-        gameActive = false;
-        updateScore(currentPlayer);
-        setTimeout(restartGame, 3000);
-    } else if (boardState.every(cell => cell !== null)) {
-        statusMessage.textContent = 'Draw!';
-        gameActive = false;
-    } else {
-        currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
-        statusMessage.textContent = `${currentPlayer}'s Turn`;
+        const result = await response.json();
+
+        if (result.status === 'success') {
+            boardState = result.board;
+            currentPlayer = result.currentPlayer;
+            const markSpan = cell.querySelector('.mark');
+            markSpan.textContent = boardState[cellIndex];
+            cell.classList.add(boardState[cellIndex] === 'X' ? 'draw-x' : 'draw-o');
+
+            if (result.winner) {
+                triggerConfetti();
+                statusMessage.textContent = `${result.winner} Wins!`;
+                gameActive = false;
+                updateScore(result.winner);
+                fetchLeaderboard();
+                setTimeout(restartGame, 3000);
+            } else if (boardState.every(cell => cell !== null)) {
+                statusMessage.textContent = 'Draw!';
+                gameActive = false;
+            } else {
+                statusMessage.textContent = `${currentPlayer}'s Turn`;
+            }
+        } else {
+            console.error(result.message);
+        }
+    } catch (error) {
+        console.error('Error making move:', error);
     }
 };
 
-//Constant function that checks if a player has won the game
-const checkWin = (player) => {
-    return winningCombinations.some(combination => {
-        return combination.every(index => boardState[index] === player);
-    });
-};
 
-
-//If somebody wins a game add one to their score
+// if somebody wins a game add one to their score
 const updateScore = (player) => {
     if (player === currentPlayer) {
         playerOneScore++;
@@ -145,9 +155,8 @@ const updateScore = (player) => {
     }
 };
 
-
-//Function that clears cells and restarts game
-const restartGame = () => {
+// Function that clears cells and restarts game
+const restartGame = async () => {
     boardState.fill(null);
     cells.forEach(cell => {
         const markSpan = cell.querySelector('.mark');
@@ -159,17 +168,38 @@ const restartGame = () => {
     gameActive = true;
 };
 
+// Function to fetch and display the leaderboard from PHP backend
+const fetchLeaderboard = async () => {
+    try {
+        const response = await fetch('index.php?action=getLeaderboard');
+        const result = await response.json();
+
+        if (result.status === 'success') {
+            const leaderboard = result.leaderboard;
+            leaderboardContent.innerHTML = '';
+            for (const [player, score] of Object.entries(leaderboard)) {
+                const entry = document.createElement('div');
+                entry.textContent = `${player}: ${score} wins`;
+                leaderboardContent.appendChild(entry);
+            }
+        } else {
+            console.error(result.message);
+        }
+    } catch (error) {
+        console.error('Error fetching leaderboard:', error);
+    }
+};
+
 // END OF FUNCTIONS
 
-
-//Add the functionality for listening for cell clicks
+// Add the functionality for listening for cell clicks
 cells.forEach(cell => cell.addEventListener('click', handleCellClick));
 
-//Functionality for listening for a restart
+// Functionality for listening for a restart
 restartButton.addEventListener('click', restartGame);
 
-//Randomizing intial game players
+// Randomizing initial game players
 decidePlayers();
 
-//Status message shows current players turn
+// Status message shows current player's turn
 statusMessage.textContent = `${currentPlayer}'s Turn`;

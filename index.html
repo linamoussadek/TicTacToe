@@ -12,7 +12,7 @@
 </head>
 <body>
 
-<!-- This section displays our intro screen withh the play button to go into the actual game -->
+<!-- This section displays our intro screen with the play button to go into the actual game -->
 <div id="introScreen" class="intro-screen">
     <h1>Tic Tac Toe</h1>
     <p>This is a Tic Tac Toe game created as an assignment project. The game was developed by Lina and Owen. Enjoy playing!</p>
@@ -24,21 +24,21 @@
     </button>
 </div>
 
-<!--Here is the actual game screent-->
+<!-- Here is the actual game screen -->
 <header>
     <h1>Tic Tac Toe</h1>
 </header>
 
-<!--Container for the game content-->
+<!-- Container for the game content -->
 <div class="container1" id="gameScreen">
     <div class="container">
-        <!--Container to display which player is X and which is O-->
+        <!-- Container to display which player is X and which is O -->
         <div class="player-info">
             <div id="player1">Player 1: X</div>
             <div id="player2">Player 2: O</div>
         </div>
 
-        <!--This is the tic tac toe board-->
+        <!-- This is the tic tac toe board -->
         <div id="board" class="board">
             <div class="cell" data-cell><span class="mark"></span></div>
             <div class="cell" data-cell><span class="mark"></span></div>
@@ -51,28 +51,27 @@
             <div class="cell" data-cell><span class="mark"></span></div>
         </div>
 
-        <!--Here is where the container that stores the player score/wins-->
+        <!-- Here is where the container that stores the player score/wins -->
         <div class="player-info">
             <div id="player1Wins" class="tally">Player 1 Wins: 0</div>
             <div id="player2Wins" class="tally">Player 2 Wins: 0</div>
         </div>
     </div>
 
-    <!--statusMessage displays whose turn it is and if a game has een won or drawn-->
+    <!-- statusMessage displays whose turn it is and if a game has been won or drawn -->
     <h2 id="statusMessage"></h2>
 
-    <!--Buttons that provide the options to restart or view rules-->
+    <!-- Buttons that provide the options to restart or view rules -->
     <button id="restartButton">
         <i class="fas fa-redo"></i> Restart Game
     </button>
     <button id="rulesButton">Game Rules</button>
 </div>
 
-<!--This displays confetti after a win-->
+<!-- This displays confetti after a win -->
 <div id="confettiContainer"></div>
 
-
-<!--This is the popup container that shows the rules to the game-->
+<!-- This is the popup container that shows the rules to the game -->
 <div id="rulesModal" class="modal">
     <div class="modal-content">
         <span class="close">&times;</span>
@@ -84,7 +83,10 @@
     </div>
 </div>
 
-<!--Running our javascript at index.js-->
+<!-- Leaderboard container -->
+<div id="leaderboardContainer" class="leaderboard-container"></div>
+
+<!-- Running our javascript at index.js -->
 <script src="js/index.js"></script>
 </body>
 </html>
