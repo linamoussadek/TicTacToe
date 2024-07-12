@@ -1,8 +1,26 @@
 <?php
+
 session_start();
 header('Content-Type: application/json');
 
 require_once '_config.php';
+
+
+class Leaderboard {
+    public $scores = [];
+
+    public function addScore($winner) {
+        if (!isset($this->scores[$winner])) {
+            $this->scores[$winner] = 0;
+        }
+        $this->scores[$winner]++;
+        arsort($this->scores);
+    }
+
+    public function getTopScores() {
+        return array_slice($this->scores, 0, 10, true);
+    }
+}
 
 class TicTacToe {
     public $board = [];
@@ -40,27 +58,15 @@ class TicTacToe {
     }
 }
 
-class Leaderboard {
-    public $scores = [];
 
-    public function addScore($winner) {
-        if (!isset($this->scores[$winner])) {
-            $this->scores[$winner] = 0;
-        }
-        $this->scores[$winner]++;
-        arsort($this->scores);
-    }
-
-    public function getTopScores() {
-        return array_slice($this->scores, 0, 10, true);
-    }
-}
 
 if (!isset($_SESSION['game'])) {
+    
     $_SESSION['game'] = new TicTacToe();
 }
 
 if (!isset($_SESSION['leaderboard'])) {
+   
     $_SESSION['leaderboard'] = new Leaderboard();
 }
 
