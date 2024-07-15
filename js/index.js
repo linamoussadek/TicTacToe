@@ -59,11 +59,11 @@ playButton.onclick = function() {
     introScreen.style.display = 'none';
     gameScreen.style.display = 'flex';
 };
-
+/*
 leaderboardButton.onclick = function() {
     leaderboardModal.style.display = 'block';
     fetchLeaderboard();
-};
+};*/
 
 window.onclick = function(event) {
     if (event.target === leaderboardModal) {
@@ -97,6 +97,7 @@ function triggerConfetti() {
 
 // Event handler that marks the selected cell with the correct x or o and then checks game status
 const handleCellClick = async (e) => {
+    console.log("Reached");
     const cell = e.target;
     const cellIndex = Array.from(cells).indexOf(cell);
 
@@ -105,18 +106,22 @@ const handleCellClick = async (e) => {
     }
 
     try {
-        const response = await fetch('index.php', {
-            method: 'POST',
+        const response = await fetch(`http://localhost:4000/index.php?action=makeMove&position=${cellIndex}`, {
+            method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ action: 'makeMove', position: cellIndex }),
         });
+
+        console.log("Reached before response");
 
         const result = await response.json();
 
+        console.log(response);
         if (result.status === 'success') {
             boardState = result.board;
+            console.log(result.board);
+            console.log(result.currentPlayer);
             currentPlayer = result.currentPlayer;
             const markSpan = cell.querySelector('.mark');
             markSpan.textContent = boardState[cellIndex];

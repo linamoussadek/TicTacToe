@@ -1,6 +1,10 @@
 <?php
 
 session_start();
+
+header("Access-Control-Allow-Origin: *");
+header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
+header("Access-Control-Allow-Headers: Content-Type, Authorization");
 header('Content-Type: application/json');
 
 require_once '_config.php';
@@ -75,6 +79,8 @@ $leaderboard = $_SESSION['leaderboard'];
 
 $response = ['status' => 'error', 'message' => 'Invalid request'];
 
+$action = null;
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $action = $_POST['action'];
 
@@ -82,10 +88,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 } elseif ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['action'])) {
     $action = $_GET['action'];
 }
+
+
 if ($action) {
     switch ($action) {
         case 'makeMove':
-            $position = $_POST['position'];
+            $position = $_GET['position'];
             $game->makeMove($position);
             $_SESSION['game'] = $game;
             if ($game->winner) {
@@ -94,9 +102,11 @@ if ($action) {
             }
             $response = [
                 'status' => 'success',
+                
                 'board' => $game->board,
                 'currentPlayer' => $game->currentPlayer,
                 'winner' => $game->winner
+                
             ];
             break;
         case 'getLeaderboard':
