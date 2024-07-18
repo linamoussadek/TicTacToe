@@ -43,11 +43,11 @@ To get started with this project, follow these steps:
 - **Viewing Game Rules**: Click the "Game Rules" button to open a modal with detailed rules.
 - **Restarting the Game**: Click the "Restart Game" button to reset the board and start a new game.
 
-![image](https://github.com/linamoussadek/TicTacToe/assets/90733151/5fb32301-9629-4634-9e10-28e88b419eac)
+![image](https://github.com/user-attachments/assets/2113728e-ab98-4b0a-8307-01f963a9e6c2)
 
-![image](https://github.com/linamoussadek/TicTacToe/assets/90733151/1ab72f03-866e-45b4-8dd7-a2640a903d84)
+![image](https://github.com/user-attachments/assets/cc113628-4cc6-485e-adbf-8db51662eb53)
 
-![image](https://github.com/linamoussadek/TicTacToe/assets/90733151/1c638e91-10fb-492e-85c1-651935505884)
+![image](https://github.com/user-attachments/assets/f747ad1a-2c8b-4d1b-bc6f-618080603cde)
 
 ## PHP integration
 
