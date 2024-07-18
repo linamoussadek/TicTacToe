@@ -9,7 +9,6 @@ header('Content-Type: application/json');
 
 require_once '_config.php';
 
-
 class Leaderboard {
     public $scores = [];
 
@@ -40,9 +39,18 @@ class TicTacToe {
             $this->board[$position] = $this->currentPlayer;
             if ($this->checkWinner()) {
                 $this->winner = $this->currentPlayer;
+                
+            
             }
             $this->currentPlayer = $this->currentPlayer === 'X' ? 'O' : 'X';
         }
+    }
+
+    public function reset(){
+        $this->board = array_fill(0, 9, null);
+        $this ->currentPlayer = 'X';
+        $this -> winner = null;
+
     }
 
     private function checkWinner() {
@@ -63,52 +71,60 @@ class TicTacToe {
 }
 
 
-
 if (!isset($_SESSION['game'])) {
-    
     $_SESSION['game'] = new TicTacToe();
+    error_log("Game initialized.");
+    console.log($_SESSION['game']);
 }
 
 if (!isset($_SESSION['leaderboard'])) {
-   
     $_SESSION['leaderboard'] = new Leaderboard();
+    error_log("Leaderboard initialized.");
 }
 
 $game = $_SESSION['game'];
 $leaderboard = $_SESSION['leaderboard'];
 
 $response = ['status' => 'error', 'message' => 'Invalid request'];
-
 $action = null;
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
     $action = $_POST['action'];
-
-
 } elseif ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['action'])) {
     $action = $_GET['action'];
 }
 
-
 if ($action) {
     switch ($action) {
         case 'makeMove':
-            $position = $_GET['position'];
-            $game->makeMove($position);
-            $_SESSION['game'] = $game;
-            if ($game->winner) {
-                $leaderboard->addScore($game->winner);
+            if (isset($_GET['position'])) {
+                $position = intval($_GET['position']);
+                $game->makeMove($position);
+                if ($game->winner) {
+                    $leaderboard->addScore($game->winner);
+                }
+                $_SESSION['game'] = $game;
                 $_SESSION['leaderboard'] = $leaderboard;
+                $response = [
+                    'status' => 'success',
+                    'board' => $game->board,
+                    'currentPlayer' => $game->currentPlayer,
+                    'winner' => $game->winner
+                ];
+            } else {
+                $response['message'] = 'Position is required for making a move';
             }
-            $response = [
-                'status' => 'success',
-                
-                'board' => $game->board,
-                'currentPlayer' => $game->currentPlayer,
-                'winner' => $game->winner
-                
-            ];
             break;
+        case 'reset':
+            $game->reset();
+            $_SESSION['game'] = $game;
+            $response = [
+                    'status' => 'success',
+                    'board' => $game->board,
+                    'currentPlayer' => $game->currentPlayer,
+                    'winner' => $game->winner
+                ];
+            
         case 'getLeaderboard':
             $response = [
                 'status' => 'success',
@@ -119,3 +135,4 @@ if ($action) {
 }
 
 echo json_encode($response);
+?>

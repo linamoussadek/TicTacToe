@@ -162,6 +162,9 @@ const updateScore = (player) => {
 
 // Function that clears cells and restarts game
 const restartGame = async () => {
+    const response = await fetch('http://localhost:4000/PHP/public/index.php?action=reset');
+    const result = await response.json();
+    if (result.status === 'success') {
     boardState.fill(null);
     cells.forEach(cell => {
         const markSpan = cell.querySelector('.mark');
@@ -171,11 +174,12 @@ const restartGame = async () => {
     decidePlayers();
     statusMessage.textContent = `${currentPlayer}'s Turn`;
     gameActive = true;
+}
 };
 
 // Function to fetch and display the leaderboard from PHP backend
 const fetchLeaderboard = async () => {
-    try {
+    /*try {
         const response = await fetch('index.php?action=getLeaderboard');
         const result = await response.json();
 
@@ -192,7 +196,7 @@ const fetchLeaderboard = async () => {
         }
     } catch (error) {
         console.error('Error fetching leaderboard:', error);
-    }
+    }*/
 };
 
 // END OF FUNCTIONS
