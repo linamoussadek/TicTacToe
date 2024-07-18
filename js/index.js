@@ -106,7 +106,7 @@ const handleCellClick = async (e) => {
     }
 
     try {
-        const response = await fetch(`http://localhost:4000/index.php?action=makeMove&position=${cellIndex}`, {
+        const response = await fetch(`http://localhost:4000/PHP/public/index.php?action=makeMove&position=${cellIndex}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
