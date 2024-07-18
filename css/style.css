@@ -297,3 +297,28 @@ h1, h2, h3, p, span {
     cursor: pointer;
     cursor: url('../docs/design_system/obi-wans-lightsaber_87091.ico')0 0 , auto;
 }
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+th, td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: center;
+}
+
+th {
+    background-color: #061c49;
+    color: #0dc6d7;
+}
+
+.leaderboard-container {
+    margin-top: 20px;
+}
+
+.leaderboard-container h2 {
+    text-align: center;
+}

@@ -51,17 +51,32 @@
             <div class="cell" data-cell><span class="mark"></span></div>
         </div>
 
-        <!-- Here is where the container that stores the player score/wins -->
-        <div class="player-info">
-            <div id="player1Wins" class="tally">Player 1 Wins: 0</div>
-            <div id="player2Wins" class="tally">Player 2 Wins: 0</div>
+        <!-- Leaderboard container -->
+        <div id="leaderboardContainer" class="leaderboard-container">
+            <h2>Leaderboard</h2>
+            <table id="leaderboard">
+                <thead>
+                <tr>
+                    <th>Player</th>
+                    <th>Wins</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>Player 1</td>
+                    <td id="player1Wins">0</td>
+                </tr>
+                <tr>
+                    <td>Player 2</td>
+                    <td id="player2Wins">0</td>
+                </tr>
+                </tbody>
+            </table>
         </div>
     </div>
 
-    <!-- statusMessage displays whose turn it is and if a game has been won or drawn -->
     <h2 id="statusMessage"></h2>
 
-    <!-- Buttons that provide the options to restart or view rules -->
     <button id="restartButton">
         <i class="fas fa-redo"></i> Restart Game
     </button>
@@ -82,9 +97,6 @@
         <p>4. When all 9 squares are full, the game is over. If no player has 3 marks in a row, the game ends in a draw.</p>
     </div>
 </div>
-
-<!-- Leaderboard container -->
-<div id="leaderboardContainer" class="leaderboard-container"></div>
 
 <!-- Running our javascript at index.js -->
 <script src="js/index.js"></script>
