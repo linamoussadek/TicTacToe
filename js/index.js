@@ -55,6 +55,23 @@ window.onclick = function(event) {
     }
 };
 
+window.onload = function() {
+    fetch('http://localhost:4000/PHP/public/index.php?action=reset', {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log('Success:', data);
+        // Do something with the data, e.g., update the DOM
+    })
+    .catch((error) => {
+        console.error('Error:', error);
+    });
+};
+
 playButton.onclick = function() {
     introScreen.style.display = 'none';
     gameScreen.style.display = 'flex';
