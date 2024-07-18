@@ -153,10 +153,10 @@ const handleCellClick = async (e) => {
 const updateScore = (player) => {
     if (player === currentPlayer) {
         playerOneScore++;
-        playerOneWins.textContent = `Player 1 Wins: ${playerOneScore}`;
+        playerOneWins.textContent = `${playerOneScore}`;
     } else {
         playerTwoScore++;
-        playerTwoWins.textContent = `Player 2 Wins: ${playerTwoScore}`;
+        playerTwoWins.textContent = `${playerTwoScore}`;
     }
 };
 
