@@ -1,17 +1,27 @@
 <?php
-
-namespace Models\Leaderboard;
-
-
 class Leaderboard {
     public $scores = [];
 
-    public function addScore($winner) {
-        if (!isset($this->scores[$winner])) {
-            $this->scores[$winner] = 0;
+    public function addScore($winner, $lastStarter) {
+        if (!isset($this->scores[1])) {
+
+            $this->scores[1] = 0;
         }
-        $this->scores[$winner]++;
-        arsort($this->scores);
+        if (!isset($this->scores[2])) {
+
+            $this->scores[2] = 0;
+        }
+        if ($winner==$lastStarter){
+
+            $this->scores[1]++;
+            arsort($this->scores);
+        }
+        else{
+
+            $this->scores[2]++;
+            arsort($this->scores);
+
+        }
     }
 
     public function getTopScores() {

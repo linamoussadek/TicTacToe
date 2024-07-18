@@ -8,81 +8,9 @@ header("Access-Control-Allow-Headers: Content-Type, Authorization");
 header('Content-Type: application/json');
 
 require_once '_config.php';
+require  '../app/models/Leaderboard.php';
+require  '../app/models/TicTacToe.php';
 
-class Leaderboard {
-    public $scores = [];
-
-    public function addScore($winner, $lastStarter) {
-        if (!isset($this->scores[1])) {
-            
-            $this->scores[1] = 0;
-        }
-        if (!isset($this->scores[2])) {
-            
-            $this->scores[2] = 0;
-        }
-        if ($winner==$lastStarter){
-        
-        $this->scores[1]++;
-        arsort($this->scores);
-    }
-    else{
-        
-        $this->scores[2]++;
-        arsort($this->scores);
-
-    }
-    }
-
-    public function getTopScores() {
-        return array_slice($this->scores, 0, 10, true);
-    }
-}
-
-class TicTacToe {
-    public $board = [];
-    public $currentPlayer = 'X';
-    public $winner = null;
-
-    public function __construct() {
-        $this->board = array_fill(0, 9, null);
-    }
-
-    public function makeMove($position) {
-        if ($this->board[$position] === null && $this->winner === null) {
-            $this->board[$position] = $this->currentPlayer;
-            if ($this->checkWinner()) {
-                $this->winner = $this->currentPlayer;
-                
-            
-            }
-            $this->currentPlayer = $this->currentPlayer === 'X' ? 'O' : 'X';
-        }
-    }
-
-    public function reset(){
-        $this->board = array_fill(0, 9, null);
-        $this ->currentPlayer = 'X';
-        $this -> winner = null;
-
-    }
-
-    private function checkWinner() {
-        $winningCombinations = [
-            [0, 1, 2], [3, 4, 5], [6, 7, 8], 
-            [0, 3, 6], [1, 4, 7], [2, 5, 8], 
-            [0, 4, 8], [2, 4, 6]  
-        ];
-        foreach ($winningCombinations as $combination) {
-            if ($this->board[$combination[0]] !== null &&
-                $this->board[$combination[0]] === $this->board[$combination[1]] &&
-                $this->board[$combination[1]] === $this->board[$combination[2]]) {
-                return true;
-            }
-        }
-        return false;
-    }
-}
 
 
 if (!isset($_SESSION['game'])) {
@@ -150,4 +78,4 @@ if ($action) {
 }
 
 echo json_encode($response);
-?>
+
