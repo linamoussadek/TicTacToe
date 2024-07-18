@@ -179,8 +179,8 @@ const restartGame = async () => {
 
 // Function to fetch and display the leaderboard from PHP backend
 const fetchLeaderboard = async () => {
-    /*try {
-        const response = await fetch('index.php?action=getLeaderboard');
+    try {
+        const response = await fetch('http://localhost:4000/PHP/public/index.php?action=getLeaderboard');
         const result = await response.json();
 
         if (result.status === 'success') {
@@ -196,7 +196,7 @@ const fetchLeaderboard = async () => {
         }
     } catch (error) {
         console.error('Error fetching leaderboard:', error);
-    }*/
+    }
 };
 
 // END OF FUNCTIONS
