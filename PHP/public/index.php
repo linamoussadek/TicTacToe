@@ -12,12 +12,26 @@ require_once '_config.php';
 class Leaderboard {
     public $scores = [];
 
-    public function addScore($winner) {
-        if (!isset($this->scores[$winner])) {
-            $this->scores[$winner] = 0;
+    public function addScore($winner, $lastStarter) {
+        if (!isset($this->scores[1])) {
+            
+            $this->scores[1] = 0;
         }
-        $this->scores[$winner]++;
+        if (!isset($this->scores[2])) {
+            
+            $this->scores[2] = 0;
+        }
+        if ($winner==$lastStarter){
+        
+        $this->scores[1]++;
         arsort($this->scores);
+    }
+    else{
+        
+        $this->scores[2]++;
+        arsort($this->scores);
+
+    }
     }
 
     public function getTopScores() {
@@ -97,11 +111,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
 if ($action) {
     switch ($action) {
         case 'makeMove':
-            if (isset($_GET['position'])) {
+            if (isset($_GET['position']) && isset($_GET['player1'])) {
                 $position = intval($_GET['position']);
+                $playerOne= $_GET['player1'];
                 $game->makeMove($position);
                 if ($game->winner) {
-                    $leaderboard->addScore($game->winner);
+                    $leaderboard->addScore($game->winner, $playerOne);
                 }
                 $_SESSION['game'] = $game;
                 $_SESSION['leaderboard'] = $leaderboard;

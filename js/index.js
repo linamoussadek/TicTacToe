@@ -106,7 +106,7 @@ const handleCellClick = async (e) => {
     }
 
     try {
-        const response = await fetch(`http://localhost:4000/PHP/public/index.php?action=makeMove&position=${cellIndex}`, {
+        const response = await fetch(`http://localhost:4000/PHP/public/index.php?action=makeMove&position=${cellIndex}&player1=${lastStarter}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -131,7 +131,7 @@ const handleCellClick = async (e) => {
                 triggerConfetti();
                 statusMessage.textContent = `${result.winner} Wins!`;
                 gameActive = false;
-                updateScore(result.winner);
+                
                 fetchLeaderboard();
                 setTimeout(restartGame, 3000);
             } else if (boardState.every(cell => cell !== null)) {
@@ -149,16 +149,6 @@ const handleCellClick = async (e) => {
 };
 
 
-// if somebody wins a game add one to their score
-const updateScore = (player) => {
-    if (player === currentPlayer) {
-        playerOneScore++;
-        playerOneWins.textContent = `${playerOneScore}`;
-    } else {
-        playerTwoScore++;
-        playerTwoWins.textContent = `${playerTwoScore}`;
-    }
-};
 
 // Function that clears cells and restarts game
 const restartGame = async () => {
@@ -185,11 +175,13 @@ const fetchLeaderboard = async () => {
 
         if (result.status === 'success') {
             const leaderboard = result.leaderboard;
-            leaderboardContent.innerHTML = '';
+            //leaderboardContent.innerHTML = '';
+            console.log(leaderboard);
             for (const [player, score] of Object.entries(leaderboard)) {
                 const entry = document.createElement('div');
-                entry.textContent = `${player}: ${score} wins`;
-                leaderboardContent.appendChild(entry);
+                playerOneWins.textContent = `${leaderboard[1]}`;
+                playerTwoWins.textContent = `${leaderboard[2]}`;
+                
             }
         } else {
             console.error(result.message);
