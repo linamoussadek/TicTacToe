@@ -55,6 +55,23 @@ window.onclick = function(event) {
     }
 };
 
+window.onload = function() {
+    fetch('http://localhost:4000/PHP/public/index.php?action=reset', {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Success:', data);
+            // Do something with the data, e.g., update the DOM
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+        });
+};
+
 playButton.onclick = function() {
     introScreen.style.display = 'none';
     gameScreen.style.display = 'flex';
@@ -131,7 +148,7 @@ const handleCellClick = async (e) => {
                 triggerConfetti();
                 statusMessage.textContent = `${result.winner} Wins!`;
                 gameActive = false;
-                
+
                 fetchLeaderboard();
                 setTimeout(restartGame, 3000);
             } else if (boardState.every(cell => cell !== null)) {
@@ -155,16 +172,16 @@ const restartGame = async () => {
     const response = await fetch('http://localhost:4000/PHP/public/index.php?action=reset');
     const result = await response.json();
     if (result.status === 'success') {
-    boardState.fill(null);
-    cells.forEach(cell => {
-        const markSpan = cell.querySelector('.mark');
-        markSpan.textContent = '';
-        cell.classList.remove('draw-x', 'draw-o');
-    });
-    decidePlayers();
-    statusMessage.textContent = `${currentPlayer}'s Turn`;
-    gameActive = true;
-}
+        boardState.fill(null);
+        cells.forEach(cell => {
+            const markSpan = cell.querySelector('.mark');
+            markSpan.textContent = '';
+            cell.classList.remove('draw-x', 'draw-o');
+        });
+        decidePlayers();
+        statusMessage.textContent = `${currentPlayer}'s Turn`;
+        gameActive = true;
+    }
 };
 
 // Function to fetch and display the leaderboard from PHP backend
@@ -181,7 +198,7 @@ const fetchLeaderboard = async () => {
                 const entry = document.createElement('div');
                 playerOneWins.textContent = `${leaderboard[1]}`;
                 playerTwoWins.textContent = `${leaderboard[2]}`;
-                
+
             }
         } else {
             console.error(result.message);

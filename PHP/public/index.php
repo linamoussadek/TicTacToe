@@ -11,8 +11,6 @@ require  '../app/models/TicTacToe.php';
 
 session_start();
 
-
-
 if (!isset($_SESSION['game'])) {
     $_SESSION['game'] = new TicTacToe();
     error_log("Game initialized.");
