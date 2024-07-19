@@ -33,7 +33,8 @@ To get started with this project, follow these steps:
    ```bash
    cd TicTacToe
    ```
-3. Open the `index.html` file in a web browser to start playing the game.
+3. Run the command php -S localhost:4000 and then go to that url to view our project.
+
 
 ## Usage
 
