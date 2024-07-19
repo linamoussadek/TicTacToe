@@ -1,7 +1,7 @@
 # Tic Tac Toe Game
 
 This repository contains a web-based Tic Tac Toe game developed as part of an assignment for the CSI3140 course on WWW Structures and Standards at the University of Ottawa. 
-The game features a simple yet engaging interface designed by Lina and Owen. It allows two players to play Tic Tac Toe interactively.
+The game features a simple yet engaging interface designed by Lina and Owen. It allows two players to play Tic Tac Toe interactively. The game state + Leaderboard is calculated via backend PHP.
 
 ## Features
 
@@ -15,6 +15,7 @@ The game features a simple yet engaging interface designed by Lina and Owen. It 
 - HTML
 - CSS
 - JavaScript
+- PHP
 - [Orbitron Font from Google Fonts](https://fonts.google.com/specimen/Orbitron)
 
 ## Design System
