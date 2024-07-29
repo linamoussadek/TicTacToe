@@ -2,6 +2,19 @@
 
 $GLOBALS["appDir"] = resolve_path("app");
 
+define('DB_SERVER', 'localhost');
+define('DB_USERNAME', 'root');
+define('DB_PASSWORD', 'Hockey@2003');
+define('DB_NAME', 'tictactoe');
+
+function getDBConnection() {
+    $conn = mysqli_connect(DB_SERVER, DB_USERNAME, DB_PASSWORD, DB_NAME);
+    if ($conn->connect_error) {
+        die("Connection failed: " . $conn->connect_error);
+    }
+    return $conn;
+}
+
 function resolve_path($name)
 {
     if ($name == ".")
