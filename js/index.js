@@ -12,12 +12,20 @@ const playerOneWins = document.getElementById('player1Wins');
 const playerTwoWins = document.getElementById('player2Wins');
 
 const rulesButton = document.getElementById('rulesButton');
-const modal = document.getElementById('rulesModal');
-const span = document.getElementsByClassName('close')[0];
+const rulesModal = document.getElementById('rulesModal');
 
-const leaderboardButton = document.getElementById('leaderboardButton');
-const leaderboardModal = document.getElementById('leaderboardModal');
-const leaderboardContent = document.getElementById('leaderboardContent');
+const addUserButton = document.getElementById('addUserButton');
+const addUserModal = document.getElementById('addUserModal');
+const addUserForm = document.getElementById('addUserForm');
+
+const viewUsersButton = document.getElementById('viewUsersButton');
+const usersListModal = document.getElementById('usersListModal');
+const usersList = document.getElementById('usersList');
+
+const userInfoModal = document.getElementById('userInfoModal');
+const userInfo = document.getElementById('userInfo');
+
+const spanClose = document.querySelectorAll('.close');
 
 // Defaulting the player win counts to 0
 let playerOneScore = 0;
@@ -42,16 +50,36 @@ let gameActive = true;
 
 // Handling certain on Click functionalities
 rulesButton.onclick = function() {
-    modal.style.display = 'block';
+    rulesModal.style.display = 'block';
 };
 
-span.onclick = function() {
-    modal.style.display = 'none';
+addUserButton.onclick = function() {
+    addUserModal.style.display = 'block';
 };
+
+viewUsersButton.onclick = async function() {
+    usersListModal.style.display = 'block';
+    await fetchUsers();
+};
+
+spanClose.forEach(span => {
+    span.onclick = function() {
+        span.parentElement.parentElement.style.display = 'none';
+    };
+});
 
 window.onclick = function(event) {
-    if (event.target === modal) {
-        modal.style.display = 'none';
+    if (event.target === rulesModal) {
+        rulesModal.style.display = 'none';
+    }
+    if (event.target === addUserModal) {
+        addUserModal.style.display = 'none';
+    }
+    if (event.target === usersListModal) {
+        usersListModal.style.display = 'none';
+    }
+    if (event.target === userInfoModal) {
+        userInfoModal.style.display = 'none';
     }
 };
 
@@ -75,17 +103,6 @@ window.onload = function() {
 playButton.onclick = function() {
     introScreen.style.display = 'none';
     gameScreen.style.display = 'flex';
-};
-/*
-leaderboardButton.onclick = function() {
-    leaderboardModal.style.display = 'block';
-    fetchLeaderboard();
-};*/
-
-window.onclick = function(event) {
-    if (event.target === leaderboardModal) {
-        leaderboardModal.style.display = 'none';
-    }
 };
 
 // FUNCTIONS
@@ -114,7 +131,6 @@ function triggerConfetti() {
 
 // Event handler that marks the selected cell with the correct x or o and then checks game status
 const handleCellClick = async (e) => {
-    console.log("Reached");
     const cell = e.target;
     const cellIndex = Array.from(cells).indexOf(cell);
 
@@ -130,15 +146,10 @@ const handleCellClick = async (e) => {
             },
         });
 
-        console.log("Reached before response");
-
         const result = await response.json();
 
-        console.log(response);
         if (result.status === 'success') {
             boardState = result.board;
-            console.log(result.board);
-            console.log(result.currentPlayer);
             currentPlayer = result.currentPlayer;
             const markSpan = cell.querySelector('.mark');
             markSpan.textContent = boardState[cellIndex];
@@ -165,8 +176,6 @@ const handleCellClick = async (e) => {
     }
 };
 
-
-
 // Function that clears cells and restarts game
 const restartGame = async () => {
     const response = await fetch('http://localhost:4000/PHP/public/index.php?action=reset');
@@ -184,7 +193,7 @@ const restartGame = async () => {
     }
 };
 
-// Function to fetch and display the leaderboard from PHP backend
+// fetch and display the leaderboard from PHP backend
 const fetchLeaderboard = async () => {
     try {
         const response = await fetch('http://localhost:4000/PHP/public/index.php?action=getLeaderboard');
@@ -192,14 +201,9 @@ const fetchLeaderboard = async () => {
 
         if (result.status === 'success') {
             const leaderboard = result.leaderboard;
-            //leaderboardContent.innerHTML = '';
             console.log(leaderboard);
-            for (const [player, score] of Object.entries(leaderboard)) {
-                const entry = document.createElement('div');
-                playerOneWins.textContent = `${leaderboard[1]}`;
-                playerTwoWins.textContent = `${leaderboard[2]}`;
-
-            }
+            playerOneWins.textContent = `${leaderboard[1]}`;
+            playerTwoWins.textContent = `${leaderboard[2]}`;
         } else {
             console.error(result.message);
         }
@@ -208,7 +212,95 @@ const fetchLeaderboard = async () => {
     }
 };
 
-// END OF FUNCTIONS
+// add a new user
+addUserForm.addEventListener('submit', async function(e) {
+    e.preventDefault();
+    const formData = new FormData(this);
+    const data = {
+        username: formData.get('username'),
+        name: formData.get('name'),
+        location: formData.get('location'),
+        profile_picture: formData.get('profile_picture')
+    };
+
+    try {
+        const response = await fetch('http://localhost:4000/PHP/public/index.php?action=addUser', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        });
+        const result = await response.json();
+        if (result.status === 'success') {
+            alert('User added successfully');
+            addUserModal.style.display = 'none';
+        } else {
+            alert('Failed to add user: ' + result.message);
+        }
+    } catch (error) {
+        console.error('Error adding user:', error);
+    }
+});
+
+// fetch and display users from PHP backend
+const fetchUsers = async () => {
+    try {
+        const response = await fetch('http://localhost:4000/PHP/public/index.php?action=viewUsers', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+        const result = await response.json();
+        if (result.status === 'success') {
+            const users = result.data;
+            let usersHtml = '<ul>';
+            users.forEach(user => {
+                usersHtml += `<li><a href="#" class="userLink" data-username="${user.username}">${user.username}</a></li>`;
+            });
+            usersHtml += '</ul>';
+            usersList.innerHTML = usersHtml;
+
+            document.querySelectorAll('.userLink').forEach(link => {
+                link.addEventListener('click', viewUserInfo);
+            });
+        } else {
+            alert('Failed to retrieve users: ' + result.message);
+        }
+    } catch (error) {
+        console.error('Error fetching users:', error);
+    }
+};
+
+// view specific user information
+const viewUserInfo = async (e) => {
+    e.preventDefault();
+    const username = e.target.getAttribute('data-username');
+
+    try {
+        const response = await fetch(`http://localhost:4000/PHP/public/index.php?action=viewUser&username=${username}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+        const result = await response.json();
+        if (result.status === 'success') {
+            const user = result.data;
+            let userInfoHtml = `<h3>${user.username}</h3>
+                <p>Name: ${user.name}</p>
+                <p>Location: ${user.location}</p>
+                <p>Profile Picture: <img src="${user.profile_picture}" alt="${user.username}'s profile picture" /></p>`;
+            userInfo.innerHTML = userInfoHtml;
+            userInfoModal.style.display = 'block';
+        } else {
+            alert('Failed to retrieve user info: ' + result.message);
+        }
+    } catch (error) {
+        console.error('Error fetching user info:', error);
+    }
+};
 
 // Add the functionality for listening for cell clicks
 cells.forEach(cell => cell.addEventListener('click', handleCellClick));

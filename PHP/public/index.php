@@ -9,21 +9,21 @@ ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
 require_once '_config.php';
-require  '../app/models/Leaderboard.php';
-require  '../app/models/TicTacToe.php';
+require '../app/models/Leaderboard.php';
+require '../app/models/TicTacToe.php';
 
 session_start();
 
 // Database connection parameters
 $host = 'localhost';
-$port = '5432'; // Default port for PostgreSQL
+$port = '5432';
 $dbname = 'tic_tac_toe';
 $user = 'postgres';
-$password = 'Hockey@2003';
+$password = 'lina';
 
 // Data Source Name (DSN) for PostgreSQL
 $dsn = "pgsql:host=$host;port=$port;dbname=$dbname";
-$pdo=null;
+$pdo = null;
 
 try {
     // Create a PDO instance
@@ -31,20 +31,14 @@ try {
 
     // Set the PDO error mode to exception
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
-    
 } catch (PDOException $e) {
-    echo "Connection failed";
+    echo json_encode(["status" => "error", "message" => "Connection failed: " . $e->getMessage()]);
+    exit;
 }
-
-
-
-
 
 if (!isset($_SESSION['game'])) {
     $_SESSION['game'] = new TicTacToe();
     error_log("Game initialized.");
-    console.log($_SESSION['game']);
 }
 
 if (!isset($_SESSION['leaderboard'])) {
@@ -69,7 +63,7 @@ if ($action) {
         case 'makeMove':
             if (isset($_GET['position']) && isset($_GET['player1'])) {
                 $position = intval($_GET['position']);
-                $playerOne= $_GET['player1'];
+                $playerOne = $_GET['player1'];
                 $game->makeMove($position);
                 if ($game->winner) {
                     $leaderboard->addScore($game->winner, $playerOne);
@@ -87,14 +81,15 @@ if ($action) {
             }
             break;
         case 'addUser':
-            $username = $_GET['username'];
-            $name = isset($_GET['name']) ? $_GET['name'] : null;
-            $location = isset($_GET['location']) ? $_GET['location'] : null;
-            $profilePicture = isset($_GET['profile_picture']) ? $_GET['profile_picture'] : null;
-    
+            $data = json_decode(file_get_contents('php://input'), true);
+            $username = $data['username'];
+            $name = isset($data['name']) ? $data['name'] : null;
+            $location = isset($data['location']) ? $data['location'] : null;
+            $profilePicture = isset($data['profile_picture']) ? $data['profile_picture'] : null;
+
             $sql = "INSERT INTO users (username, name, location, profile_picture) 
-            VALUES (:username, :name, :location, :profile_picture)";
-    
+                    VALUES (:username, :name, :location, :profile_picture)";
+
             $stmt = $pdo->prepare($sql);
             $stmt->bindParam(':username', $username);
             $stmt->bindParam(':name', $name);
@@ -102,17 +97,17 @@ if ($action) {
             $stmt->bindParam(':profile_picture', $profilePicture);
 
             if ($stmt->execute()) {
-             $response = [
-            'status' => 'success',
-            'message' => 'User added successfully'
+                $response = [
+                    'status' => 'success',
+                    'message' => 'User added successfully'
                 ];
             } else {
-            $response = [
-            'status' => 'error',
-            'message' => 'Failed to add user'
-            ];
-             }
-        case 'checkUser':
+                $response = [
+                    'status' => 'error',
+                    'message' => 'Failed to add user'
+                ];
+            }
+            break;
         case 'viewUsers':
             $sql = "SELECT id, username, name, location, profile_picture FROM users";
             $stmt = $pdo->prepare($sql);
@@ -126,27 +121,27 @@ if ($action) {
             break;
         case 'viewUser':
             $username = $_GET['username'];
-            $sql = "SELECT id, username, name, location, profile_picture FROM users where username=:username";
+            $sql = "SELECT id, username, name, location, profile_picture FROM users WHERE username=:username";
             $stmt = $pdo->prepare($sql);
             $stmt->bindParam(':username', $username);
             $stmt->execute();
-            $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
             $response = [
                 'status' => 'success',
-                'data' => $users
+                'data' => $user
             ];
             break;
         case 'reset':
             $game->reset();
             $_SESSION['game'] = $game;
             $response = [
-                    'status' => 'success',
-                    'board' => $game->board,
-                    'currentPlayer' => $game->currentPlayer,
-                    'winner' => $game->winner
-                ];
-            
+                'status' => 'success',
+                'board' => $game->board,
+                'currentPlayer' => $game->currentPlayer,
+                'winner' => $game->winner
+            ];
+            break;
         case 'getLeaderboard':
             $response = [
                 'status' => 'success',

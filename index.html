@@ -73,6 +73,8 @@
                 <i class="fas fa-redo"></i> Restart Game
             </button>
             <button id="rulesButton">Game Rules</button>
+            <button id="addUserButton">Add User</button>
+            <button id="viewUsersButton">View Users</button>
         </div>
     </div>
 </div>
@@ -87,6 +89,35 @@
         <p>2. Player 1 is X, Player 2 is O. Players take turns putting their marks in empty squares.</p>
         <p>3. The first player to get 3 of their marks in a row (up, down, across, or diagonally) is the winner.</p>
         <p>4. When all 9 squares are full, the game is over. If no player has 3 marks in a row, the game ends in a draw.</p>
+    </div>
+</div>
+
+<div id="addUserModal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2>Add User</h2>
+        <form id="addUserForm">
+            <input type="text" id="username" name="username" placeholder="Username" required>
+            <input type="text" id="name" name="name" placeholder="Name">
+            <input type="text" id="location" name="location" placeholder="Location">
+            <input type="text" id="profile_picture" name="profile_picture" placeholder="Profile Picture URL">
+            <button type="submit">Add User</button>
+        </form>
+    </div>
+</div>
+
+<div id="usersListModal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2>Users List</h2>
+        <div id="usersList"></div>
+    </div>
+</div>
+
+<div id="userInfoModal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <div id="userInfo"></div>
     </div>
 </div>
 
