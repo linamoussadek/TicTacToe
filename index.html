@@ -38,16 +38,17 @@
                 </thead>
                 <tbody>
                 <tr>
-                    <td>Player 1</td>
+                    <td id ="player1Status">Player 1 (Guest)</td>
                     <td id="player1Wins">0</td>
                 </tr>
                 <tr>
-                    <td>Player 2</td>
+                    <td id = "player2Status">Player 2 (Guest)</td>
                     <td id="player2Wins">0</td>
                 </tr>
                 </tbody>
             </table>
         </div>
+        
 
         <div id="board" class="board">
             <div class="cell" data-cell><span class="mark"></span></div>
@@ -75,6 +76,7 @@
             <button id="rulesButton">Game Rules</button>
             <button id="addUserButton">Add User</button>
             <button id="viewUsersButton">View Users</button>
+            <button id="viewLeaderboardButton">Leaderboard</button>
         </div>
     </div>
 </div>
@@ -96,12 +98,52 @@
     <div class="modal-content">
         <span class="close">&times;</span>
         <h2>Add User</h2>
-        <form id="addUserForm">
+        <form id="addPlayer1Form">
             <input type="text" id="username" name="username" placeholder="Username" required>
             <input type="text" id="name" name="name" placeholder="Name">
             <input type="text" id="location" name="location" placeholder="Location">
-            <input type="text" id="profile_picture" name="profile_picture" placeholder="Profile Picture URL">
-            <button type="submit">Add User</button>
+            <fieldset>
+                <legend>Profile Picture:</legend>
+                <div class="profile-pic-container">
+                    <label class="profile-pic-option">
+                        <input type="radio" name="profile_picture" value="https://th.bing.com/th?id=OIP.kwEYk6gukNfFjz4mLfxB5wHaEo&w=316&h=197&c=8&rs=1&qlt=90&o=6&dpr=1.1&pid=3.1&rm=2" required>
+                        <img src="https://th.bing.com/th?id=OIP.kwEYk6gukNfFjz4mLfxB5wHaEo&w=316&h=197&c=8&rs=1&qlt=90&o=6&dpr=1.1&pid=3.1&rm=2" alt="Profile Picture 1">
+                    </label>
+                    <label class="profile-pic-option">
+                        <input type="radio" name="profile_picture" value="https://th.bing.com/th?id=OIP.3y-ZobGSpGpsWAWu6KpykQHaEo&w=316&h=197&c=8&rs=1&qlt=90&o=6&dpr=1.1&pid=3.1&rm=2" required>
+                        <img src="https://th.bing.com/th?id=OIP.3y-ZobGSpGpsWAWu6KpykQHaEo&w=316&h=197&c=8&rs=1&qlt=90&o=6&dpr=1.1&pid=3.1&rm=2" alt="Profile Picture 2">
+                    </label>
+                    <label class="profile-pic-option">
+                        <input type="radio" name="profile_picture" value="https://th.bing.com/th?id=OIP.NjePDgQ2rTCCYIrawoP51AHaFQ&w=296&h=210&c=8&rs=1&qlt=90&o=6&dpr=1.1&pid=3.1&rm=2" required>
+                        <img src="https://th.bing.com/th?id=OIP.NjePDgQ2rTCCYIrawoP51AHaFQ&w=296&h=210&c=8&rs=1&qlt=90&o=6&dpr=1.1&pid=3.1&rm=2" alt="Profile Picture 3">
+                    </label>
+                </div>
+            </fieldset>
+            
+            <button type="submit">Add Player 1</button>
+        </form>
+        <form id="addPlayer2Form">
+            <input type="text" id="username" name="username" placeholder="Username" required>
+            <input type="text" id="name" name="name" placeholder="Name">
+            <input type="text" id="location" name="location" placeholder="Location">
+            <fieldset>
+                <legend>Profile Picture:</legend>
+                <div class="profile-pic-container">
+                    <label class="profile-pic-option">
+                        <input type="radio" name="profile_picture" value="https://th.bing.com/th?id=OIP.kwEYk6gukNfFjz4mLfxB5wHaEo&w=316&h=197&c=8&rs=1&qlt=90&o=6&dpr=1.1&pid=3.1&rm=2" required>
+                        <img src="https://th.bing.com/th?id=OIP.kwEYk6gukNfFjz4mLfxB5wHaEo&w=316&h=197&c=8&rs=1&qlt=90&o=6&dpr=1.1&pid=3.1&rm=2" alt="Profile Picture 1">
+                    </label>
+                    <label class="profile-pic-option">
+                        <input type="radio" name="profile_picture" value="https://th.bing.com/th?id=OIP.3y-ZobGSpGpsWAWu6KpykQHaEo&w=316&h=197&c=8&rs=1&qlt=90&o=6&dpr=1.1&pid=3.1&rm=2" required>
+                        <img src="https://th.bing.com/th?id=OIP.3y-ZobGSpGpsWAWu6KpykQHaEo&w=316&h=197&c=8&rs=1&qlt=90&o=6&dpr=1.1&pid=3.1&rm=2" alt="Profile Picture 2">
+                    </label>
+                    <label class="profile-pic-option">
+                        <input type="radio" name="profile_picture" value="https://th.bing.com/th?id=OIP.NjePDgQ2rTCCYIrawoP51AHaFQ&w=296&h=210&c=8&rs=1&qlt=90&o=6&dpr=1.1&pid=3.1&rm=2" required>
+                        <img src="https://th.bing.com/th?id=OIP.NjePDgQ2rTCCYIrawoP51AHaFQ&w=296&h=210&c=8&rs=1&qlt=90&o=6&dpr=1.1&pid=3.1&rm=2" alt="Profile Picture 3">
+                    </label>
+                </div>
+            </fieldset>
+            <button type="submit">Add Player 2</button>
         </form>
     </div>
 </div>
@@ -111,6 +153,13 @@
         <span class="close">&times;</span>
         <h2>Users List</h2>
         <div id="usersList"></div>
+    </div>
+</div>
+<div id="leaderboardModal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2>Leaderboard</h2>
+        <div id="leaderboardprompt"></div>
     </div>
 </div>
 

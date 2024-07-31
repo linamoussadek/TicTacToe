@@ -19,7 +19,7 @@ $host = 'localhost';
 $port = '5432';
 $dbname = 'tic_tac_toe';
 $user = 'postgres';
-$password = 'lina';
+$password = 'Hockey@2003';
 
 // Data Source Name (DSN) for PostgreSQL
 $dsn = "pgsql:host=$host;port=$port;dbname=$dbname";
@@ -82,10 +82,10 @@ if ($action) {
             break;
         case 'addUser':
             $data = json_decode(file_get_contents('php://input'), true);
-            $username = $data['username'];
-            $name = isset($data['name']) ? $data['name'] : null;
-            $location = isset($data['location']) ? $data['location'] : null;
-            $profilePicture = isset($data['profile_picture']) ? $data['profile_picture'] : null;
+            $username = $_GET['username'];
+            $name = isset($_GET['name']) ? $_GET['name'] : null;
+            $location = isset($_GET['location']) ? $_GET['location'] : null;
+            $profilePicture = isset($_GET['profile_picture']) ? $_GET['profile_picture'] : null;
 
             $sql = "INSERT INTO users (username, name, location, profile_picture) 
                     VALUES (:username, :name, :location, :profile_picture)";
@@ -97,10 +97,23 @@ if ($action) {
             $stmt->bindParam(':profile_picture', $profilePicture);
 
             if ($stmt->execute()) {
+                $sql2 = "INSERT INTO leaderboard (username, wins) 
+                    VALUES (:username, 0)";
+                     $stmt2 = $pdo->prepare($sql2);
+                     $stmt2->bindParam(':username', $username);
+                     if ($stmt2->execute()) {
                 $response = [
                     'status' => 'success',
                     'message' => 'User added successfully'
                 ];
+            }
+            else{
+                $response = [
+                    'status' => 'error',
+                    'message' => 'Failed to add user'
+                ];
+            }
+        
             } else {
                 $response = [
                     'status' => 'error',
@@ -132,6 +145,39 @@ if ($action) {
                 'data' => $user
             ];
             break;
+        case 'viewLeaderboard':
+            $sql = "SELECT username, wins FROM leaderboard order by wins desc";
+            $stmt = $pdo->prepare($sql);
+            $stmt->execute();
+            $leaderboard = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+            $response = [
+                'status' => 'success',
+                'data' => $leaderboard
+            ];
+            break;
+
+        case 'updateWins':
+            $username = $_GET['username'];
+            $sql = "SELECT wins FROM leaderboard WHERE username=:username";
+            $stmt = $pdo->prepare($sql);
+            $stmt->execute(['username' => $username]);
+
+    $result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    if ($result) {
+        $currentWins = $result['wins'];
+        $newWins = $currentWins + 1;
+
+        // Update the wins
+        $updateSql = "UPDATE Leaderboard SET wins = :wins WHERE username = :username";
+        $updateStmt = $pdo->prepare($updateSql);
+        $updateStmt->execute(['wins' => $newWins, 'username' => $username]);
+
+        echo "Wins updated successfully!";
+    } else {
+        echo "User not found in the Leaderboard.";
+    }
         case 'reset':
             $game->reset();
             $_SESSION['game'] = $game;

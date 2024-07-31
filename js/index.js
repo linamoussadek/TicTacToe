@@ -11,16 +11,24 @@ const playerTwo = document.getElementById('player2');
 const playerOneWins = document.getElementById('player1Wins');
 const playerTwoWins = document.getElementById('player2Wins');
 
+const playerOneStatus = document.getElementById('player1Status');
+const playerTwoStatus = document.getElementById('player2Status');
+
 const rulesButton = document.getElementById('rulesButton');
 const rulesModal = document.getElementById('rulesModal');
 
 const addUserButton = document.getElementById('addUserButton');
 const addUserModal = document.getElementById('addUserModal');
-const addUserForm = document.getElementById('addUserForm');
+const addUser1Form = document.getElementById('addPlayer1Form');
+const addUser2Form = document.getElementById('addPlayer2Form');
 
 const viewUsersButton = document.getElementById('viewUsersButton');
 const usersListModal = document.getElementById('usersListModal');
 const usersList = document.getElementById('usersList');
+
+const viewLeaderboardButton = document.getElementById('viewLeaderboardButton');
+const leaderboardModal = document.getElementById('leaderboardModal');
+const leaderboardList = document.getElementById('leaderboardprompt');
 
 const userInfoModal = document.getElementById('userInfoModal');
 const userInfo = document.getElementById('userInfo');
@@ -62,6 +70,11 @@ viewUsersButton.onclick = async function() {
     await fetchUsers();
 };
 
+viewLeaderboardButton.onclick = async function() {
+    leaderboardModal.style.display = 'block';
+    await fetchLeaderboards();
+};
+
 spanClose.forEach(span => {
     span.onclick = function() {
         span.parentElement.parentElement.style.display = 'none';
@@ -77,6 +90,9 @@ window.onclick = function(event) {
     }
     if (event.target === usersListModal) {
         usersListModal.style.display = 'none';
+    }
+    if (event.target === leaderboardModal) {
+        leaderboardModal.style.display = 'none';
     }
     if (event.target === userInfoModal) {
         userInfoModal.style.display = 'none';
@@ -110,8 +126,8 @@ playButton.onclick = function() {
 // Helper function for selecting which player is X and which is O
 function decidePlayers() {
     currentPlayer = lastStarter = (lastStarter === 'X' ? 'O' : 'X');
-    playerOne.textContent = `Player 1 (${currentPlayer})`;
-    playerTwo.textContent = `Player 2 (${currentPlayer === 'X' ? 'O' : 'X'})`;
+    playerOne.textContent = `${playerOneStatus.textContent} (${currentPlayer})`;
+    playerTwo.textContent = `${playerTwoStatus.textContent} (${currentPlayer === 'X' ? 'O' : 'X'})`;
 }
 
 // Helper function that triggers confetti upon a win
@@ -193,6 +209,19 @@ const restartGame = async () => {
     }
 };
 
+async function appendWin (username){
+    const response = await fetch(`http://localhost:4000/PHP/public/index.php?action=updateWins&username=${username}`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    });
+
+    if (!response.ok) {
+        throw new Error('Network response was not ok');
+    }
+}
+
 // fetch and display the leaderboard from PHP backend
 const fetchLeaderboard = async () => {
     try {
@@ -202,6 +231,12 @@ const fetchLeaderboard = async () => {
         if (result.status === 'success') {
             const leaderboard = result.leaderboard;
             console.log(leaderboard);
+            if (parseInt(playerOneWins.textContent, 10)<leaderboard[1]){
+                appendWin(playerOneStatus.textContent);
+            }
+            if (parseInt(playerTwoWins.textContent, 10)<leaderboard[2]){
+                appendWin(playerOneStatus.textContent);
+            }
             playerOneWins.textContent = `${leaderboard[1]}`;
             playerTwoWins.textContent = `${leaderboard[2]}`;
         } else {
@@ -213,7 +248,7 @@ const fetchLeaderboard = async () => {
 };
 
 // add a new user
-addUserForm.addEventListener('submit', async function(e) {
+addUser1Form.addEventListener('submit', async function(e) {
     e.preventDefault();
     const formData = new FormData(this);
     const data = {
@@ -224,17 +259,70 @@ addUserForm.addEventListener('submit', async function(e) {
     };
 
     try {
-        const response = await fetch('http://localhost:4000/PHP/public/index.php?action=addUser', {
-            method: 'POST',
+        const queryParams = new URLSearchParams({
+            action: 'addUser',
+            username: data.username,
+            name: data.name,
+            location: data.location,
+            profile_picture: data.profile_picture,
+        }).toString();
+        console.log(queryParams);
+    
+        const response = await fetch(`http://localhost:4000/PHP/public/index.php?${queryParams}`, {
+            method: 'GET',
             headers: {
                 'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(data)
+            }
+        });
+        const result = await response.json();
+        if (result.status === 'success') {
+            alert('User added successfully');
+
+            addUserModal.style.display = 'none';
+            console.log(data["username"]);
+            playerOneStatus.textContent=data["username"];
+            playerOneStatus.textContent;
+        } else {
+            alert('Failed to add user: ' + result.message);
+        }
+    } catch (error) {
+        console.error('Error adding user:', error);
+    }
+});
+
+addUser2Form.addEventListener('submit', async function(e) {
+    e.preventDefault();
+    const formData = new FormData(this);
+    const data = {
+        username: formData.get('username'),
+        name: formData.get('name'),
+        location: formData.get('location'),
+        profile_picture: formData.get('profile_picture')
+    };
+
+    try {
+        const queryParams = new URLSearchParams({
+            action: 'addUser',
+            username: data.username,
+            name: data.name,
+            location: data.location,
+            profile_picture: data.profile_picture
+        }).toString();
+        console.log(queryParams);
+    
+        const response = await fetch(`http://localhost:4000/PHP/public/index.php?${queryParams}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
         });
         const result = await response.json();
         if (result.status === 'success') {
             alert('User added successfully');
             addUserModal.style.display = 'none';
+            console.log(data["username"]);
+            playerTwoStatus.textContent=data["username"];
+            playerTwoStatus.textContent;
         } else {
             alert('Failed to add user: ' + result.message);
         }
@@ -272,6 +360,42 @@ const fetchUsers = async () => {
         console.error('Error fetching users:', error);
     }
 };
+
+const fetchLeaderboards = async () => {
+    console.log("Reached");
+    try {
+        const response = await fetch('http://localhost:4000/PHP/public/index.php?action=viewLeaderboard', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+        const result = await response.json();
+
+        if (result.status === 'success') {
+            
+            const leaderboard = result.data;
+            console.log(leaderboard);
+            let usersHtml = '<ul>';
+            leaderboard.forEach(leaderboard => {
+                usersHtml += `<li><a href="#" class="userLink" data-username="${leaderboard.username}">${leaderboard.username}: </a> <p> ${leaderboard.wins}</p></li>`;
+            });
+            usersHtml += '</ul>';
+            console.log(usersHtml);
+            leaderboardList.innerHTML = usersHtml;
+            console.log(leadboardList.innerHTML);
+
+            document.querySelectorAll('.userLink').forEach(link => {
+                link.addEventListener('click', viewUserInfo);
+            });
+        } else {
+            alert('Failed to retrieve users: ' + result.message);
+        }
+    } catch (error) {
+        console.error('Error fetching users:', error);
+    }
+};
+
 
 // view specific user information
 const viewUserInfo = async (e) => {
