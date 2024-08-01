@@ -8,6 +8,7 @@ The game features a simple yet engaging interface designed by Lina and Owen. It 
 - **Interactive Play**: Two players can play against each other, marking Xs and Os on a 3x3 grid.
 - **Dynamic Score Tracking**: The game tracks the number of wins for each player across sessions.
 - **Game Rules Modal**: Players can view the rules of the game through an interactive modal window.
+- **User Management**: Players can add new users, view a list of users, and see detailed information about each user, including profile pictures.
 - **Animations**: The game includes animations for marking Xs and Os, and a celebratory confetti animation when a player wins.
 
 ## Technologies Used
@@ -16,6 +17,7 @@ The game features a simple yet engaging interface designed by Lina and Owen. It 
 - CSS
 - JavaScript
 - PHP
+- PostgreSQL
 - [Orbitron Font from Google Fonts](https://fonts.google.com/specimen/Orbitron)
 
 ## Design System
@@ -34,7 +36,24 @@ To get started with this project, follow these steps:
    ```bash
    cd TicTacToe
    ```
-3. Open the `index.html` file in a web browser to start playing the game.
+3. Set up the database:
+ ```bash
+   psql -U postgres -d tic_tac_toe -f "db/schema.sql"
+   psql -U postgres -d tic_tac_toe -f "db/seed.sql"
+   ```
+4. Configure the database connection in index.php:
+ ```bash
+   $host = 'localhost';
+   $port = '5432';
+   $dbname = 'tic_tac_toe';
+   $user = 'postgres';
+   $password = 'your_password_here';
+   ```
+5. Start the PHP Server:
+    ```bash
+   php -S localhost:4000
+   ```
+
 
 ## Usage
 
@@ -42,12 +61,15 @@ To get started with this project, follow these steps:
 - **Playing the Game**: Players alternate turns by clicking on an empty cell in the grid to place their mark (X or O).
 - **Viewing Game Rules**: Click the "Game Rules" button to open a modal with detailed rules.
 - **Restarting the Game**: Click the "Restart Game" button to reset the board and start a new game.
+- 
 
-![image](https://github.com/user-attachments/assets/2113728e-ab98-4b0a-8307-01f963a9e6c2)
+![image](https://github.com/user-attachments/assets/33d19ef5-7b14-43fe-99d8-12a5c286607d)
 
-![image](https://github.com/user-attachments/assets/cc113628-4cc6-485e-adbf-8db51662eb53)
 
-![image](https://github.com/user-attachments/assets/f747ad1a-2c8b-4d1b-bc6f-618080603cde)
+![image](https://github.com/user-attachments/assets/e9a8c4a5-2591-417b-8228-c822a47a9a46)
+
+
+![image](https://github.com/user-attachments/assets/0dd44069-2abe-472a-b69c-3688db9b6ea9)
 
 ## PHP integration
 
@@ -88,12 +110,25 @@ The game logic is located in PHP classes that represent the game and the leaderb
     - When a player wins, their score is updated.
     - The leaderboard can be queried to return the scores.
 
+### Database Integration
+
+ **Schema Design **
+ 
+The database schema is designed to handle user information and game data efficiently. The users table stores user profiles with fields for username, name, location, and profile picture. The leaderboard table tracks the game scores, linking each score to a user through a foreign key relationship with the users table. This structure ensures data integrity and supports efficient queries for user information and game results.
+
+ **Database Operations **
+ 
+PHP scripts manage the interaction between the web application and the PostgreSQL database. The index.php file defines endpoints for adding users, viewing user information, and updating the leaderboard. These operations use prepared statements to prevent SQL injection attacks and ensure robust database interactions. Data seeding scripts populate the database with initial users and scores, providing a ready-to-use environment for development and testing.
+
 ### JavaScript Adaptations
 
-The JavaScript code (`index.js`) is adapted to interact with the PHP backend via AJAX calls. Instead of handling the game logic and state locally, it now sends requests to the server and updates the UI based on the server's responses.
+ **AJAX Requests **
+ 
+JavaScript in this project primarily handles user interactions and interface updates. We use AJAX to send asynchronous requests to the PHP backend, which processes these requests and interacts with the database. This approach allows the web application to update dynamically without requiring full page reloads. For instance, when a user is added or a move is made in the game, JavaScript sends a request to the relevant PHP endpoint, which processes the action and returns a response that JavaScript uses to update the interface.
 
-1. **AJAX calls**: JavaScript functions make AJAX requests to the PHP API endpoints for actions like making moves, resetting the game, and fetching the leaderboard.
-2. **UI updates**: The responses from the server (e.g., the updated board state, current player, and game status) are used to update the game interface dynamically.
+ **Dynamic UI Updates**
+ 
+The JavaScript code is designed to keep the user interface responsive and interactive. It dynamically updates the game board, user lists, and leaderboard based on responses from the PHP backend. Event listeners are attached to UI elements to handle actions such as adding a user, viewing users, and making moves in the game. This separation of concerns ensures that the frontend remains focused on presentation and interaction, while the backend handles logic and data management, resulting in a clean and maintainable codebase.
 
 
 ## Authors
