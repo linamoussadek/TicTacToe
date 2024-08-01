@@ -61,7 +61,10 @@ To get started with this project, follow these steps:
 - **Playing the Game**: Players alternate turns by clicking on an empty cell in the grid to place their mark (X or O).
 - **Viewing Game Rules**: Click the "Game Rules" button to open a modal with detailed rules.
 - **Restarting the Game**: Click the "Restart Game" button to reset the board and start a new game.
-- 
+- **Adding Users**: Click the "Add User" button to open a modal where new users can be added. Fill in the user details and submit the form to add the user.
+- **Viewing Users**: Click the "View Users" button to open a modal that displays a list of all users. Click on a user to see detailed information.
+- **Viewing Leaderboard**: Click the "Leaderboard" button to see the top players based on their win counts.
+
 
 ![image](https://github.com/user-attachments/assets/33d19ef5-7b14-43fe-99d8-12a5c286607d)
 
@@ -112,21 +115,21 @@ The game logic is located in PHP classes that represent the game and the leaderb
 
 ### Database Integration
 
- **Schema Design **
+**Schema Design**
  
 The database schema is designed to handle user information and game data efficiently. The users table stores user profiles with fields for username, name, location, and profile picture. The leaderboard table tracks the game scores, linking each score to a user through a foreign key relationship with the users table. This structure ensures data integrity and supports efficient queries for user information and game results.
 
- **Database Operations **
- 
+**Database Operations** 
+
 PHP scripts manage the interaction between the web application and the PostgreSQL database. The index.php file defines endpoints for adding users, viewing user information, and updating the leaderboard. These operations use prepared statements to prevent SQL injection attacks and ensure robust database interactions. Data seeding scripts populate the database with initial users and scores, providing a ready-to-use environment for development and testing.
 
 ### JavaScript Adaptations
 
- **AJAX Requests **
- 
+**AJAX Requests** 
+
 JavaScript in this project primarily handles user interactions and interface updates. We use AJAX to send asynchronous requests to the PHP backend, which processes these requests and interacts with the database. This approach allows the web application to update dynamically without requiring full page reloads. For instance, when a user is added or a move is made in the game, JavaScript sends a request to the relevant PHP endpoint, which processes the action and returns a response that JavaScript uses to update the interface.
 
- **Dynamic UI Updates**
+**Dynamix UI Updates**
  
 The JavaScript code is designed to keep the user interface responsive and interactive. It dynamically updates the game board, user lists, and leaderboard based on responses from the PHP backend. Event listeners are attached to UI elements to handle actions such as adding a user, viewing users, and making moves in the game. This separation of concerns ensures that the frontend remains focused on presentation and interaction, while the backend handles logic and data management, resulting in a clean and maintainable codebase.
 
